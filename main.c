@@ -1,4 +1,4 @@
-/*
+    /*
  *  Nomes: Leonardo Altemari Nogueira - 10284883
  *         Pedro Henrique Magalhães Cisdeli - 10289804
  */
@@ -18,6 +18,10 @@
 #include"funcionalidade_5.h"
 #include"funcionalidade_6.h"
 #include"funcionalidade_7.h"
+#include"funcionalidade_8.h"
+
+#include"funcionalidade_10.h"
+
 
 
 
@@ -183,7 +187,7 @@ int main() {
     int numVezes;
     scanf("%d", &numVezes);
     for (int i = 0; i < numVezes; i++)
-      insereRegistros(fpbin);
+      insereRegistros(fpbin, NULL, NULL);
 
     // Escrita no arquivo foi finalizada, retorna o status para 1
     setStatus(fpbin, "1");
@@ -222,6 +226,97 @@ int main() {
     setStatus(fpbin, "1");
     fclose(fpbin);
     binarioNaTela(nomeArquivoBinario);
+  }
+  // FUNCIONALIDADE 8
+  else if(funcionalidade == 8) {
+    scanf("%s ", nomeArquivoBinario);
+
+    char nomeArquivoIndice[100];
+    scanf("%s", nomeArquivoIndice);
+
+    // Teste de abertura do arquivo binario para leitura somente
+    FILE *fpbin = fopen(nomeArquivoBinario, "rb");
+    if(fpbin == NULL || !returnStatus(fpbin) ) {
+          printf("Falha no processamento do arquivo.\n");
+          if (fpbin != NULL) // Fecha o arquivo caso o status não seja consistente
+            fclose(fpbin);
+          return 0;
+    }
+
+    // Teste de abertura do arquivo de Indice para escrita e leitura
+    FILE *btBin = fopen(nomeArquivoIndice, "r+b");
+    if(btBin == NULL || !returnStatus(btBin) ) {
+          printf("Falha no processamento do arquivo.\n");
+          if (btBin != NULL) // Fecha o arquivo caso o status não seja consistente
+            fclose(btBin);
+          return 0;
+    } else {
+          // Arquivo foi aberto para escrita(inserção de registro), portanto seu
+          // status fica como 0 enquanto ele estiver aberto
+          setStatus(btBin, "0");
+    }
+
+    // Insere os registros de fpBin no arquivo de indice arvore B btBin.
+    driver(fpbin, btBin);
+
+    fclose(fpbin);
+    fclose(btBin);
+
+    binarioNaTela(nomeArquivoIndice);
+  }
+  //FUNCIONALIDADE 9
+  else if(funcionalidade == 9) {
+
+  }
+  //FUNCIONALIDADE 10
+  else if(funcionalidade == 10) {
+      scanf("%s ", nomeArquivoBinario);
+
+      char nomeArquivoIndice[100];
+      scanf("%s", nomeArquivoIndice);
+
+      // Teste de abertura do arquivo binario para leitura somente
+      FILE *fpbin = fopen(nomeArquivoBinario, "r+b");
+      if(fpbin == NULL || !returnStatus(fpbin) ) {
+            printf("Falha no processamento do arquivo.\n");
+            if (fpbin != NULL) // Fecha o arquivo caso o status não seja consistente
+              fclose(fpbin);
+            return 0;
+      } else {
+          // Arquivo foi aberto para escrita(inserção de registro), portanto seu
+          // status fica como 0 enquanto ele estiver aberto
+          setStatus(fpbin, "0");
+      }
+
+      // Teste de abertura do arquivo de Indice para escrita e leitura
+      FILE *btBin = fopen(nomeArquivoIndice, "r+b");
+      if(btBin == NULL || !returnStatus(btBin) ) {
+            printf("Falha no processamento do arquivo.\n");
+            if (btBin != NULL) // Fecha o arquivo caso o status não seja consistente
+              fclose(btBin);
+            return 0;
+      } else {
+            // Arquivo foi aberto para escrita(inserção de registro), portanto seu
+            // status fica como 0 enquanto ele estiver aberto
+            setStatus(btBin, "0");
+      }
+
+
+      int numEntradas;
+      scanf("%d", &numEntradas);
+
+      for(int i = 0; i < numEntradas; i++) {
+        insereRegistroBTree(fpbin, btBin);
+      }
+
+
+      // Retorna o status de ambos arquivos para 1 e oss fecha
+      setStatus(fpbin, "1");
+      setStatus(btBin, "1");
+      fclose(fpbin);
+      fclose(btBin);
+
+      binarioNaTela(nomeArquivoIndice);
   }
 
   return 0;

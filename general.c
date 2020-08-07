@@ -163,6 +163,7 @@ int returnStatus(FILE *fpbin) {
   fseek(fpbin, 0, SEEK_SET);
   char status;
   fread(&status, sizeof(char), 1, fpbin);
+  fseek(fpbin, 0, SEEK_SET);
   return (int)status - 48;
 }
 
